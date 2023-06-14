@@ -1,49 +1,3 @@
-// import { createSlice, nanoid } from '@reduxjs/toolkit';
-
-// const taskInitialState = [
-//   { id: 0, text: 'Learn HTML and CSS', completed: true },
-//   { id: 1, text: 'Get good at JavaScript', completed: true },
-//   { id: 2, text: 'Master React', completed: false },
-//   { id: 3, text: 'Discover Redux', completed: false },
-//   { id: 4, text: 'Build amazing apps', completed: false },
-// ];
-
-// const tasksSlice = createSlice({
-//   name: 'tasks',
-//   initialState: taskInitialState,
-//   reducers: {
-//     addTask: {
-//       reducer(state, { payload }) {
-//         state.push(payload);
-//       },
-//       prepare(text) {
-//         return {
-//           payload: {
-//             text,
-//             id: nanoid(),
-//             completed: false,
-//           },
-//         };
-//       },
-//     },
-//     deleteTask(state, { payload }) {
-//       const index = state.findIndex(task => task.id === payload);
-//       state.splice(index, 1);
-//     },
-//     toggleCompleted(state, { payload }) {
-//       for (const task of state) {
-//         if (task.id === payload) {
-//           task.completed = !task.completed;
-//           break;
-//         }
-//       }
-//     },
-//   },
-// });
-
-// export const { addTask, deleteTask, toggleCompleted } = tasksSlice.actions;
-// export const tasksReducer = tasksSlice.reducer;
-
 //=============== Before ========================
 
 // import { createSlice } from '@reduxjs/toolkit';
@@ -77,10 +31,92 @@
 
 //=============== After ========================
 
-import { createSlice } from '@reduxjs/toolkit';
-import { fetchTasks } from './operations';
+// import { createSlice } from '@reduxjs/toolkit';
+// import {
+//   addTasks,
+//   deleteTasks,
+//   fetchTasks,
+//   toggleCompleted,
+// } from './operations';
 
-const tasksSlice = createSlice({
+// const tasksSlice = createSlice({
+//   name: 'tasks',
+//   initialState: {
+//     items: [],
+//     isLoading: false,
+//     error: null,
+//   },
+//   extraReducers: {
+//     [fetchTasks.pending](state) {
+//       state.isLoading = true;
+//     },
+//     [fetchTasks.fulfilled](state, { payload }) {
+//       state.isLoading = false;
+//       state.error = null;
+//       state.items = payload;
+//     },
+//     [fetchTasks.rejected](state, { payload }) {
+//       state.isLoading = false;
+//       state.error = payload;
+//     },
+//     [addTasks.pending](state) {
+//       state.isLoading = true;
+//     },
+//     [addTasks.fulfilled](state, { payload }) {
+//       state.isLoading = false;
+//       state.error = null;
+//       state.items.push(payload);
+//     },
+//     [addTasks.rejected](state, { payload }) {
+//       state.isLoading = false;
+//       state.error = payload;
+//     },
+//     [deleteTasks.pending](state) {
+//       state.isLoading = true;
+//     },
+//     [deleteTasks.fulfilled](state, { payload }) {
+//       state.isLoading = false;
+//       state.error = null;
+//       const index = state.items.findIndex(task => task.id === payload.id);
+//       state.items.splice(index, 1);
+//     },
+//     [deleteTasks.rejected](state, { payload }) {
+//       state.isLoading = false;
+//       state.error = payload;
+//     },
+//     [toggleCompleted.pending](state) {
+//       state.isLoading = true;
+//     },
+//     [toggleCompleted.fulfilled](state, { payload }) {
+//       state.isLoading = false;
+//       state.error = null;
+//       const index = state.items.findIndex(task => task.id === payload.id);
+//       state.items.splice(index, 1);
+//     },
+//     [toggleCompleted.rejected](state, { payload }) {
+//       state.isLoading = false;
+//       state.error = payload;
+//     },
+//   },
+// });
+
+// export const tasksReducer = tasksSlice.reducer;
+
+//=============== After + refactoring ========================
+
+import { createSlice } from '@reduxjs/toolkit';
+import { fetchTasks, addTask, deleteTask, toggleCompleted } from './operations';
+
+const handlePending = state => {
+  state.isLoading = true;
+};
+
+const handleRejected = (state, { payload }) => {
+  state.isLoading = false;
+  state.error = payload;
+};
+
+const tasksSice = createSlice({
   name: 'tasks',
   initialState: {
     items: [],
@@ -88,19 +124,40 @@ const tasksSlice = createSlice({
     error: null,
   },
   extraReducers: {
-    [fetchTasks.pending](state) {
-      state.isLoading = true;
-    },
+    //=============== pending ========================
+    [fetchTasks.pending]: handlePending,
+    [addTask.pending]: handlePending,
+    [deleteTask.pending]: handlePending,
+    [toggleCompleted.pending]: handlePending,
+    //=============== rejected ========================
+    [fetchTasks.rejected]: handleRejected,
+    [addTask.rejected]: handleRejected,
+    [deleteTask.rejected]: handleRejected,
+    [toggleCompleted.rejected]: handleRejected,
+    //=============== fulfilled ========================
     [fetchTasks.fulfilled](state, { payload }) {
       state.isLoading = false;
       state.error = null;
       state.items = payload;
     },
-    [fetchTasks.rejected](state, { payload }) {
+    [addTask.fulfilled](state, { payload }) {
       state.isLoading = false;
-      state.error = payload;
+      state.error = null;
+      state.items.push(payload);
+    },
+    [deleteTask.fulfilled](state, { payload }) {
+      state.isLoading = false;
+      state.error = null;
+      const index = state.items.findIndex(task => task.id === payload.id);
+      state.items.splice(index, 1);
+    },
+    [toggleCompleted.fulfilled](state, { payload }) {
+      state.isLoading = false;
+      state.error = null;
+      const index = state.items.findIndex(task => task.id === payload.id);
+      state.items.splice(index, 1, payload);
     },
   },
 });
 
-export const tasksReducer = tasksSlice.reducer;
+export const tasksReducer = tasksSice.reducer;
