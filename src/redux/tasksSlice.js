@@ -1,4 +1,4 @@
-//=============== Before ========================
+//=============== Before = "IMMER the best" ========================
 
 // import { createSlice } from '@reduxjs/toolkit';
 
@@ -29,15 +29,10 @@
 //   tasksSlice.actions;
 // export const tasksReducer = tasksSlice.reducer;
 
-//=============== After ========================
+//=============== After = "IMMER the best" ========================
 
 // import { createSlice } from '@reduxjs/toolkit';
-// import {
-//   addTasks,
-//   deleteTasks,
-//   fetchTasks,
-//   toggleCompleted,
-// } from './operations';
+// import { addTask, deleteTask, fetchTasks, toggleCompleted } from './operations';
 
 // const tasksSlice = createSlice({
 //   name: 'tasks',
@@ -59,28 +54,28 @@
 //       state.isLoading = false;
 //       state.error = payload;
 //     },
-//     [addTasks.pending](state) {
+//     [addTask.pending](state) {
 //       state.isLoading = true;
 //     },
-//     [addTasks.fulfilled](state, { payload }) {
+//     [addTask.fulfilled](state, { payload }) {
 //       state.isLoading = false;
 //       state.error = null;
 //       state.items.push(payload);
 //     },
-//     [addTasks.rejected](state, { payload }) {
+//     [addTask.rejected](state, { payload }) {
 //       state.isLoading = false;
 //       state.error = payload;
 //     },
-//     [deleteTasks.pending](state) {
+//     [deleteTask.pending](state) {
 //       state.isLoading = true;
 //     },
-//     [deleteTasks.fulfilled](state, { payload }) {
+//     [deleteTask.fulfilled](state, { payload }) {
 //       state.isLoading = false;
 //       state.error = null;
 //       const index = state.items.findIndex(task => task.id === payload.id);
 //       state.items.splice(index, 1);
 //     },
-//     [deleteTasks.rejected](state, { payload }) {
+//     [deleteTask.rejected](state, { payload }) {
 //       state.isLoading = false;
 //       state.error = payload;
 //     },
@@ -91,7 +86,7 @@
 //       state.isLoading = false;
 //       state.error = null;
 //       const index = state.items.findIndex(task => task.id === payload.id);
-//       state.items.splice(index, 1);
+//       state.items.splice(index, 1, payload);
 //     },
 //     [toggleCompleted.rejected](state, { payload }) {
 //       state.isLoading = false;
@@ -102,7 +97,7 @@
 
 // export const tasksReducer = tasksSlice.reducer;
 
-//=============== After + refactoring ========================
+//=============== After + refactoring = "IMMER the best" ========================
 
 import { createSlice } from '@reduxjs/toolkit';
 import { fetchTasks, addTask, deleteTask, toggleCompleted } from './operations';
