@@ -44,7 +44,41 @@
 // export const { addTask, deleteTask, toggleCompleted } = tasksSlice.actions;
 // export const tasksReducer = tasksSlice.reducer;
 
+//=============== Before ========================
+
+// import { createSlice } from '@reduxjs/toolkit';
+
+// const tasksSlice = createSlice({
+//   name: 'tasks',
+//   initialState: {
+//     items: [],
+//     isLoading: false,
+//     error: null,
+//   },
+//   reducers: {
+//     fetchingInProgress(state) {
+//       state.isLoading = true;
+//     },
+//     fetchInSucces(state, { payload }) {
+//       state.isLoading = false;
+//       state.error = null;
+//       state.items = payload;
+//     },
+//     fetchInError(state, { payload }) {
+//       state.isLoading = false;
+//       state.error = payload;
+//     },
+//   },
+// });
+
+// export const { fetchingInProgress, fetchInSucces, fetchInError } =
+//   tasksSlice.actions;
+// export const tasksReducer = tasksSlice.reducer;
+
+//=============== After ========================
+
 import { createSlice } from '@reduxjs/toolkit';
+import { fetchTasks } from './operations';
 
 const tasksSlice = createSlice({
   name: 'tasks',
@@ -53,22 +87,20 @@ const tasksSlice = createSlice({
     isLoading: false,
     error: null,
   },
-  reducers: {
-    fetchingInProgress(state) {
+  extraReducers: {
+    [fetchTasks.pending](state) {
       state.isLoading = true;
     },
-    fetchInSucces(state, { payload }) {
+    [fetchTasks.fulfilled](state, { payload }) {
       state.isLoading = false;
       state.error = null;
       state.items = payload;
     },
-    fetchInError(state, { payload }) {
+    [fetchTasks.rejected](state, { payload }) {
       state.isLoading = false;
       state.error = payload;
     },
   },
 });
 
-export const { fetchingInProgress, fetchInSucces, fetchInError } =
-  tasksSlice.actions;
 export const tasksReducer = tasksSlice.reducer;
