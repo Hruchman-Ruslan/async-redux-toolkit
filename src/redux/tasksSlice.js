@@ -354,3 +354,60 @@ const tasksSice = createSlice({
 });
 
 export const tasksReducer = tasksSice.reducer;
+
+//=============== After javascript 😈 ninja style ========================
+
+// import { createSlice, isAnyOf } from '@reduxjs/toolkit';
+// import { fetchTasks, addTask, deleteTask, toggleCompleted } from './operations';
+
+// const ninjaActions = [fetchTasks, addTask, deleteTask, toggleCompleted];
+
+// const tasksSice = createSlice({
+//   name: 'tasks',
+//   initialState: {
+//     items: [],
+//     isLoading: false,
+//     error: null,
+//   },
+//   extraReducers: builder =>
+//     builder
+//       //=============== fulfilled ========================
+//       .addCase(fetchTasks.fulfilled, (state, { payload }) => {
+//         state.items = payload;
+//       })
+//       .addCase(addTask.fulfilled, (state, { payload }) => {
+//         state.items.push(payload);
+//       })
+//       .addCase(deleteTask.fulfilled, (state, { payload }) => {
+//         const index = state.items.findIndex(task => task.id === payload.id);
+//         state.items.splice(index, 1);
+//       })
+//       .addCase(toggleCompleted.fulfilled, (state, { payload }) => {
+//         const index = state.items.findIndex(task => task.id === payload.id);
+//         state.items.splice(index, 1, payload);
+//       })
+//       .addMatcher(
+//         isAnyOf(...ninjaActions.map(action => action.fulfilled)),
+//         state => {
+//           state.isLoading = false;
+//           state.error = null;
+//         }
+//       )
+//       //=============== pending ========================
+//       .addMatcher(
+//         isAnyOf(...ninjaActions.map(action => action.pending)),
+//         state => {
+//           state.isLoading = true;
+//         }
+//       )
+//       //=============== rejected ========================
+//       .addMatcher(
+//         isAnyOf(...ninjaActions.map(action => action.rejected)),
+//         (state, { payload }) => {
+//           state.isLoading = false;
+//           state.error = payload;
+//         }
+//       ),
+// });
+
+// export const tasksReducer = tasksSice.reducer;
